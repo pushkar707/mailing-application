@@ -1,0 +1,55 @@
+<% layout('boilerplate.ejs') %>
+<style>
+    .form{
+        padding: 20px;
+        background-color: antiquewhite;
+        /* background-color: beige; */
+    }
+</style>
+
+<h2 class="text-center my-4">Add Client</h2>
+
+<form action="/add" method="post" class="w-50 my-4 mx-auto form">
+    <div class="mb-3">
+        <label for="name" class="form-label">Company Name</label>
+        <input type="text" id="name" name="name" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="business" class="form-label">Business Product</label>
+        <input type="text" id="business" name="business" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="website" class="form-label">Company's Website</label>
+        <input type="text" id="website" name="website" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="size" class="form-label">Choose Company Type</label>
+        <select name="size" id="size" class="form-control">
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="linkedin" class="form-label">Company's Linkedin</label>
+        <input type="text" id="linkedin" name="linkedin" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="snov" class="form-label">Company's Snov</label>
+        <input type="text" id="snov" name="snov" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="remarks" class="form-label">Remarks</label>
+        <input type="text" id="remarks" name="remarks" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <button class="btn btn-success w-100">Submit</button>
+    </div>
+</form>

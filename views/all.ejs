@@ -1,0 +1,118 @@
+<% layout('boilerplate.ejs') %>
+<style>
+    .table{
+        margin: auto;
+        width: 80vw;
+    }
+    .heading{
+        margin: 2rem auto;
+    }
+    /* table,td,th{
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-collapse: collapse;
+    } */
+    th{
+        padding: 12px;
+    }
+    td{
+        padding: 12px;
+        min-height: 50px;
+        /* padding-bottom: 14px; */
+    }
+</style>
+
+<h2 class="text-center heading">All Clients</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Sno.</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Details</th>
+            <th>Website</th>
+            <th>Remarks</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% clients.forEach((client,index) => { %>
+         <tr>
+            <th><%= index+1 %></th>
+            <td><%= client.name %> (<%= client.people.length %>) </td>
+            <td><%= client.status %></td>
+            <td><%= client.business %> (<%= client.size == 'small' ? "S" : client.size == 'medium' ? 'M' : 'L'  %>) </td>
+            <td><%= client.website %></td>
+            <td><%= client.remarks %></td>
+            <td>
+                <div class="d-flex align-items-center">
+                    <a class="btn btn-warning btn-sm me-2" href="/<%= client._id %>"><i class="fa-solid fa-info"></i></a>
+                    <% if (client.linkedin) { %>
+                        <a class="mx-1 my-0" href="<%= client.linkedin %>" target="_blank"><i class="fs-4 fa-brands fa-linkedin"></i></a>
+                    <% } %>
+                    <% if (client.snov) { %>
+                        <a class="btn btn-warning btn-sm ms-2" target="_blank" href="<%= client.snov %>">Snov</a>
+                    <% } %>
+                    <i class="fa-solid fa-edit ms-2" style="cursor: pointer;" onclick="setDetails('<%= client._id %>','<%= client.name %>','<%= client.website %>','<%= client.business %>','<%= client.size %>','<%= client.linkedin %>','<%= client.snov %>','<%= client.remarks %>')" data-bs-toggle="modal" data-bs-target="#editModal"></i>
+                </div>
+            </td>
+         </tr>
+        <% }) %>
+    </tbody>
+</table>
+
+<div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Set Mail Content</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="/<%=// client._id %>/mail" method="POST">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Company Name</label>
+                    <input type="text" id="name" name="name" class="form-control">
+                </div>
+            
+                <div class="mb-3">
+                    <label for="business" class="form-label">Business Product</label>
+                    <input type="text" id="business" name="business" class="form-control">
+                </div>
+            
+                <div class="mb-3">
+                    <label for="website" class="form-label">Company's Website</label>
+                    <input type="text" id="website" name="website" class="form-control">
+                </div>
+            
+                <div class="mb-3">
+                    <label for="size" class="form-label">Choose Company Type</label>
+                    <select name="size" id="size" class="form-control">
+                        <option value="small">Small</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large</option>
+                    </select>
+                </div>
+            
+                <div class="mb-3">
+                    <label for="linkedin" class="form-label">Company's Linkedin</label>
+                    <input type="text" id="linkedin" name="linkedin" class="form-control">
+                </div>
+            
+                <div class="mb-3">
+                    <label for="snov" class="form-label">Company's Snov</label>
+                    <input type="text" id="snov" name="snov" class="form-control">
+                </div>
+            
+                <div class="mb-3">
+                    <label for="remarks" class="form-label">Remarks</label>
+                    <input type="text" id="remarks" name="remarks" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-primary">Mail</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
