@@ -25,7 +25,6 @@
 </style>
 
 <h2 class="text-center my-4"><%= client.name %> </h2>
-<form action="/<%= client._id %>/mail" id="mail-form"></form>
 <table class="table table-bordered mx-auto w-75">
     <thead>
         <tr>
@@ -45,7 +44,7 @@
             <td><%= client.business %></td>
             <td><%= client.remarks %></td>
             <td><%= client.people.length %></td>
-            <td><button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#mailModal">Mail</button></td>
+            <td><button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#mailModal">Mail</button></td>
             <td>
                 <div class="d-flex align-items-center">
                     <% if (client.linkedin) { %>
@@ -64,7 +63,7 @@
     <input type="text" name="name" placeholder="Prospect First Name" class="form-control d-inline-block mx-1 w-75">
     <input type="text" name="post" placeholder="Prospect Post" class="form-control d-inline-block mx-1">
     <input type="email" name="email" placeholder="Prospect Email" class="form-control d-inline-block mx-1">
-    <button class="btn btn-info ms-3">Add</button>
+    <button class="btn btn-success ms-3">Add</button>
 </form>
 
 <table class="prospects-table table table-bordered mb-5">
@@ -83,7 +82,7 @@
         <td><%= person.email %></td>
         <td><%= person.post %></td>
         <td><%= person.status %></td>
-        <td><form action="/<%= client._id %>/delete/<%= person._id %>" method="POST"><button class="btn"><i class="fa-solid fa-trash"></i></button></form></td>
+        <td><form action="/<%= client._id %>/<%= person._id %>?_method=DELETE" method="POST"><button class="btn"><i class="fa-solid fa-trash"></i></button></form></td>
      </tr>
     <% }) %>
 </table>

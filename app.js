@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const Client = require('./models/Client')
 const ejsMate = require('ejs-mate')
 const nodemailer = require('nodemailer');
+const methodOverride = require('method-override')
 
 const app = express()
 
@@ -22,32 +23,45 @@ mongoose.connect(process.env.MONGODBURI,()=>{
 })
 
 app.use(express.urlencoded({extended:true}))
-
 app.engine('ejs',ejsMate)
 app.set('view engine','ejs')
+app.use(methodOverride('_method'))
 
+// ALL CLIENTS
 app.get('/',async(req,res)=>{
     const clients = await Client.find({})
     clients.reverse()
     res.render('all',{clients})
 })
 
+
+// ADD CLIENTS
 app.get('/add',async(req,res)=>{
     res.render('add')
 })
-
-
 app.post('/add',async(req,res)=>{
     const client = new Client(req.body)
     await client.save()
     res.redirect('/')
 })
 
+
+//SINGLE CLIENT
 app.get('/:id',async(req,res)=>{
     const client = await Client.findById(req.params.id)
     res.render('client',{client})
 })
+app.put('/:id',async(req,res)=>{
+    const client = await Client.findByIdAndUpdate(req.params.id,req.body)
+    res.redirect('back')
+})
+app.delete('/:id',async(req,res)=>{
+    await Client.findByIdAndDelete(req.params.id)
+    res.redirect('back')
+})
 
+
+// PPROSPECT TO CLIENT
 app.post('/:id/add',async(req,res)=>{
     const client = await Client.findByIdAndUpdate(req.params.id,{$push:{people:req.body}})
     if(client.status.slice(0,10) == 'All Mailed'){
@@ -56,12 +70,13 @@ app.post('/:id/add',async(req,res)=>{
     }
     res.redirect('back')
 })
-
-app.post('/:id/delete/:personId',async(req,res)=>{
+app.delete('/:id/:personId',async(req,res)=>{
     await Client.findByIdAndUpdate(req.params.id,{$pull:{people:{_id:req.params.personId}}})
     res.redirect('back')
 })
 
+
+// MAIL ALL PROSPECTS OF CLIENT
 app.post('/:id/mail',async(req,res)=>{
     let {subject,body} = req.body
     let text = body.replace('\r\n/g','<br>')

@@ -52,7 +52,7 @@
                     <% if (client.snov) { %>
                         <a class="btn btn-warning btn-sm ms-2" target="_blank" href="<%= client.snov %>">Snov</a>
                     <% } %>
-                    <i class="fa-solid fa-edit ms-2" style="cursor: pointer;" onclick="setDetails('<%= client._id %>','<%= client.name %>','<%= client.website %>','<%= client.business %>','<%= client.size %>','<%= client.linkedin %>','<%= client.snov %>','<%= client.remarks %>')" data-bs-toggle="modal" data-bs-target="#editModal"></i>
+                    <i class="fa-solid fa-edit ms-2" style="cursor: pointer;" onclick="setDetails('<%= client._id %>','<%= client.name %>','<%= client.status %>','<%= client.website %>','<%= client.business %>','<%= client.size %>','<%= client.linkedin %>','<%= client.snov %>','<%= client.remarks %>')" data-bs-toggle="modal" data-bs-target="#editModal"></i>
                 </div>
             </td>
          </tr>
@@ -67,11 +67,16 @@
           <h1 class="modal-title fs-5" id="staticBackdropLabel">Set Mail Content</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="/<%=// client._id %>/mail" method="POST">
+        <form action="/<%=// client._id %>/mail" method="POST" id="edit-form">
             <div class="modal-body">
                 <div class="mb-3">
                     <label for="name" class="form-label">Company Name</label>
                     <input type="text" id="name" name="name" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <input type="text" id="status" name="status" class="form-control">
                 </div>
             
                 <div class="mb-3">
@@ -110,9 +115,34 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button class="btn btn-primary">Mail</button>
+                <button class="btn btn-info">Update</button>
             </div>
         </form>
+        <form action="" id="delete-form" method="POST"></form>
+        <button class="btn btn-danger" id="delete-btn">Delete</button>
       </div>
     </div>
 </div>
+
+<script>
+    const setDetails = (id,name,status,website,business,size,linkedin,snov,remarks) => {
+        document.getElementById('edit-form').setAttribute('action',`/${id}?_method=PUT`)
+        document.getElementById('name').value = name
+        document.getElementById('status').value = status
+        document.getElementById('website').value = website
+        document.getElementById('business').value = business
+        document.getElementById('size').value = size
+        document.getElementById('linkedin').value = linkedin
+        document.getElementById('snov').value = snov
+        document.getElementById('remarks').value = remarks
+        document.getElementById('delete-form').setAttribute('action',`/${id}?_method=DELETE`)
+        document.getElementById('delete-btn').setAttribute('onclick',`deleteClient('${name}')`)
+    }
+
+    const deleteClient = (name) => {
+        if(window.confirm(`Are you sure you want to delete ${name}?`)){
+            const deleteForm = document.getElementById('delete-form')
+            deleteForm.submit()
+        }
+    }
+</script>
