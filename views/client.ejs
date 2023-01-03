@@ -1,17 +1,12 @@
 <% layout('boilerplate.ejs') %>
 
 <style>
-    /* .table-bordered{
-        border-color: rgba(0, 0, 0, 0.25);
-        border-collapse: collapse;
-    } */
     th{
         padding: 15px !important;
     }
     td{
         padding: 15px !important;
         min-height: 50px;
-        /* padding-bottom: 14px; */
     }
     .add-person{
         width: 65%;
@@ -22,10 +17,15 @@
         width: 90vw;
         max-width: 760px;
     }
+    @media (max-width:800px) {
+        .add-person{
+            width: 95%;
+        }
+    }
 </style>
 
 <h2 class="text-center my-4"><%= client.name %> </h2>
-<table class="table table-bordered mx-auto w-75">
+<table class="table table-bordered mx-auto w-75 desktop">
     <thead>
         <tr>
             <th>Size</th>
@@ -40,7 +40,7 @@
     <tbody>
          <tr>
             <td><%= client.size %> </td>
-            <td><%= client.website %></td>
+            <td><%= client.website %><a class="text-secondary ms-2" target="_blank" href="<%= client.website %>"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
             <td><%= client.business %></td>
             <td><%= client.remarks %></td>
             <td><%= client.people.length %></td>
@@ -59,6 +59,16 @@
     </tbody>
 </table>
 
+<ul class="mobile ms-3">
+    <li><%= client.size %> </li>
+    <li><%= client.website %><a class="text-secondary ms-2" target="_blank" href="<%= client.website %>"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></li>
+    <li><%= client.business %></li>
+    <li><%= client.remarks %></li>
+    <li>Prospects: <%= client.people.length %></li>
+</ul>
+
+<button class="mobile btn btn-warning ms-5" data-bs-toggle="modal" data-bs-target="#mailModal">Mail</button>
+
 <form action="/<%= client._id%>/add" method="POST" class="d-flex add-person mx-auto" >
     <input type="text" name="name" placeholder="Prospect First Name" class="form-control d-inline-block mx-1 w-75">
     <input type="text" name="post" placeholder="Prospect Post" class="form-control d-inline-block mx-1">
@@ -68,16 +78,17 @@
 
 <table class="prospects-table table table-bordered mb-5">
     <tr>
-        <th>Sno.</th>
+        <th class="desktop">Sno.</th>
         <th>Name</th>
         <th>Email</th>
         <th>Post</th>
         <th>Status</th>
-        <th>Action</th>
+        <th class="desktop">Action</th>
+        <th class="mobile"></th>
     </tr>
     <% client.people.reverse().forEach((person,index) => { %>
      <tr>
-        <th><%= index+1 %> </th>
+        <th class="desktop"><%= index+1 %> </th>
         <td><%= person.name %></td>
         <td><%= person.email %></td>
         <td><%= person.post %></td>
